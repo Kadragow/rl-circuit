@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/react-router": "^5.1.20",
     "chart.js": "^4.4.7",
     "cra-template-typescript": "1.2.0",
+    "lodash.throttle": "^4.1.1",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
@@ -35,6 +37,7 @@
     ]
   },
   "devDependencies": {
+    "tailwindcss": "^3.4.17",
     "web-vitals": "^4.2.4"
   }
 }
