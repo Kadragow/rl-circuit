@@ -2,16 +2,32 @@ import { Option } from "../types/Options";
 
 const options: Option[] = [
   {
-    name: "yScale",
-    label: "Y Axis Scale",
+    name: "yMinScale",
+    label: "Y Min",
     type: "number",
-    defaultValue: 10,
+    defaultValue: 0,
+    row: true,
   },
   {
-    name: "xScale",
-    label: "X Axis Scale",
+    name: "yMaxScale",
+    label: "Y Max",
     type: "number",
     defaultValue: 10,
+    row: true,
+  },
+  {
+    name: "xMinScale",
+    label: "X Min",
+    type: "number",
+    defaultValue: 0,
+    row: true,
+  },
+  {
+    name: "xMaxScale",
+    label: "X Max",
+    type: "number",
+    defaultValue: 10,
+    row: true,
   },
   {
     name: "inductance",
@@ -31,7 +47,6 @@ const options: Option[] = [
     type: "number",
     defaultValue: 0.5,
   },
-
   {
     name: "driverStep",
     label: "Driver Step",
@@ -40,15 +55,17 @@ const options: Option[] = [
   },
   {
     name: "sampling",
-    label: "Sampling (number of samples, between selected points)",
+    label: "Sampling (number of samples, between driver steps)",
     type: "number",
     defaultValue: 10,
   },
 ];
 
-export const defaultOptions: { [name: string]: number | string } = {
-  yScale: 10,
-  xScale: 10,
+export const defaultOptions = {
+  yMinScale: 0,
+  yMaxScale: 10,
+  xMinScale: 0,
+  xMaxScale: 10,
   inductance: 0.1,
   resistance: 1,
   roundTo: 0.5,

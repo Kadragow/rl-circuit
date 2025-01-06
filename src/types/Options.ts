@@ -3,4 +3,5 @@ export type Option = {
   name: string;
   type?: string;
   defaultValue?: string | number;
+  row?: boolean;
 };
