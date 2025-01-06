@@ -7,6 +7,8 @@ import { Point } from "./types/Point.ts";
 import { calculateCurrent } from "./lib/calculateCurrent.ts";
 import { calculateInterpolatePoints } from "./lib/interpolate.ts";
 import CombinedChart from "./components/CombinedChart.tsx";
+import Button from "./components/Button.tsx";
+import { downloadCSV, exportToCSV } from "./lib/download.ts";
 
 function App() {
   const [selectedPoints, setSelectedPoints] = useState<Point[]>([]);
@@ -55,17 +57,21 @@ function App() {
     setSelectedPoints((prev) => [...prev.filter((_, pIdx) => pIdx !== idx)]);
   };
 
-  console.log(
-    options.yMinScale,
-    options.yMaxScale,
-    options.xMinScale,
-    options.xMaxScale
-  );
+  const handleDownloadCSV = () => {
+    const csvData = exportToCSV(currentPoints);
+    const name = `R_${options.resistance}-L_${options.inductance}-step_${options.driverStep}-sampl_${options.sampling}`;
+    downloadCSV(csvData, `points-${name}.csv`);
+  };
+
   return (
     <div className="App min-h-screen flex flex-col lg:flex-row gap-8 p-6 bg-gray-50">
       {/* <div className="flex flex-row gap-8"> */}
-      <div>
+      <div className="flex flex-col content-around justify-around">
         <Options values={options} onChange={handleChange} />
+        <Button
+          onClick={handleDownloadCSV}
+          label="Download current points as CSV"
+        />
       </div>
       <div className="flex flex-col gap-8">
         <SelectableChart
@@ -88,7 +94,6 @@ function App() {
           xMaxScale={options.xMaxScale}
         />
       </div>
-      {/* </div> */}
     </div>
   );
 }

@@ -5,7 +5,7 @@ import Input from "./Input.tsx";
 
 const Options: React.FC<OptionsProps> = ({ values, onChange }) => {
   return (
-    <div className="flex flex-col gap-4 p-6 bg-gray-100 rounded-lg shadow-md w-[500px] h-full">
+    <div className="flex flex-col gap-4 p-6 bg-gray-100 rounded-lg shadow-md w-[500px]">
       <div className="flex flex-row flex-wrap gap-4">
         {options.map((el: Option) => (
           <Input
