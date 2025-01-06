@@ -51,6 +51,7 @@ function App() {
   };
 
   const addPoint = (p: Point) => {
+    if (selectedPoints.find((el: Point) => el.x === p.x)) return;
     setSelectedPoints((prev) => [...prev, p].sort((a, b) => a.x - b.x));
   };
   const deletePoint = (idx: number) => {

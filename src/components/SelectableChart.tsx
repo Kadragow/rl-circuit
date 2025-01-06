@@ -163,7 +163,7 @@ const SelectableChart = ({
           x: {hoveredPoint.x.toFixed(2)}, y: {hoveredPoint.y.toFixed(2)}
         </div>
       )}
-      <div className="flex flex-col">
+      <div className="flex flex-col overflow-auto">
         <h3 className="mt-4 text-lg font-bold text-gray-800">Added Points:</h3>
         <ul className="mt-2 text-gray-600 columns-2 md:columns-3 gap-4">
           {selectedPoints.map((point, index) => (
