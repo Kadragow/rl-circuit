@@ -56,28 +56,40 @@ const SelectableChart = ({
     ],
   };
 
+  const getCanvasPosition = (event: MouseEvent, canvas: HTMLCanvasElement) => {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    };
+  };
+
+  const getXY = (event, chart) => {
+    const canvas = chart.canvas;
+    const nativeEvent = event.native as MouseEvent;
+
+    const canvasPosition = getCanvasPosition(nativeEvent, canvas);
+
+    const xScale = chart.scales.x;
+    const yScale = chart.scales.y;
+
+    if (!xScale || !yScale) return { x: 0, y: 0 };
+
+    let x = xScale.getValueForPixel(canvasPosition.x);
+    let y = yScale.getValueForPixel(canvasPosition.y);
+
+    // Snap values to nearest 0.5
+    x = roundToStep(x, roundTo);
+    y = roundToStep(y, roundTo);
+
+    return { x, y };
+  };
+
   const handleHover = useCallback(
     throttle((event: any, elements: any[], chart: any) => {
       if (!chart) return;
 
-      const xScale = chart.scales.x;
-      const yScale = chart.scales.y;
-
-      if (!xScale || !yScale) return;
-
-      const canvasPosition = {
-        x: event.native.offsetX,
-        y: event.native.offsetY,
-      };
-
-      let xValue = xScale.getValueForPixel(canvasPosition.x);
-      let yValue = yScale.getValueForPixel(canvasPosition.y);
-
-      // Snap values to nearest 0.5
-      xValue = roundToStep(xValue, roundTo);
-      yValue = roundToStep(yValue, roundTo);
-
-      setHoveredPoint({ x: xValue, y: yValue });
+      setHoveredPoint(getXY(event, chart));
       setTooltipPosition({ x: event.native.clientX, y: event.native.clientY });
     }, 10) as unknown as (
       event: ChartEvent,
@@ -123,33 +135,17 @@ const SelectableChart = ({
     onClick: (event: any, elements: any[], chart: any) => {
       if (!chart) return;
 
-      // Calculate X and Y values based on click position
-      const xScale = chart.scales.x;
-      const yScale = chart.scales.y;
-
-      if (!xScale || !yScale) return;
-
-      const canvasPosition = {
-        x: event.native.offsetX,
-        y: event.native.offsetY,
-      };
-
-      let xValue = xScale.getValueForPixel(canvasPosition.x);
-      let yValue = yScale.getValueForPixel(canvasPosition.y);
-
-      // Snap values to nearest 0.5
-      xValue = roundToStep(xValue, roundTo);
-      yValue = roundToStep(yValue, roundTo);
-
-      // Add new point to the dataset
-      addPoint({ x: xValue, y: yValue });
+      addPoint(getXY(event, chart));
     },
     onHover: handleHover,
   };
 
   return (
     <div className="flex flex-row bg-white p-6 rounded-lg shadow-lg flex-grow h-[45%]">
-      <div className="w-full" onMouseLeave={() => setHoveredPoint(null)}>
+      <div
+        className="relative w-full"
+        onMouseLeave={() => setHoveredPoint(null)}
+      >
         <Scatter data={data} options={options} />
       </div>
       {hoveredPoint && (
