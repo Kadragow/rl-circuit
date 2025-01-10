@@ -64,7 +64,7 @@ const SelectableChart = ({
     };
   };
 
-  const getXY = (event, chart) => {
+  const getXY = (event, chart, roundTo) => {
     const canvas = chart.canvas;
     const nativeEvent = event.native as MouseEvent;
 
@@ -78,7 +78,6 @@ const SelectableChart = ({
     let x = xScale.getValueForPixel(canvasPosition.x);
     let y = yScale.getValueForPixel(canvasPosition.y);
 
-    // Snap values to nearest 0.5
     x = roundToStep(x, roundTo);
     y = roundToStep(y, roundTo);
 
@@ -89,13 +88,13 @@ const SelectableChart = ({
     throttle((event: any, elements: any[], chart: any) => {
       if (!chart) return;
 
-      setHoveredPoint(getXY(event, chart));
+      setHoveredPoint(getXY(event, chart, roundTo));
       setTooltipPosition({ x: event.native.clientX, y: event.native.clientY });
     }, 10) as unknown as (
       event: ChartEvent,
       elements: ActiveElement[],
       chart: Chart<"scatter">
-    ) => void, // Throttle to update every 50ms
+    ) => void,
     []
   );
 
@@ -135,7 +134,7 @@ const SelectableChart = ({
     onClick: (event: any, elements: any[], chart: any) => {
       if (!chart) return;
 
-      addPoint(getXY(event, chart));
+      addPoint(getXY(event, chart, roundTo));
     },
     onHover: handleHover,
   };
